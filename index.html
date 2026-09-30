@@ -13,7 +13,7 @@
             font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
 
-        /* ★ 整个页面背景：白色 → 浅蓝渐变 */
+        /* 整个页面背景：白色 → 浅蓝渐变 */
         body {
             background: linear-gradient(135deg,
                 #ffffff 0%,
@@ -39,22 +39,37 @@
             height: auto;
         }
 
-        /* 文字层：绝对定位到图片内的浅色信纸区域 */
+        /* ====== 文字层（关键：用 vw 让字号跟随屏幕宽度自动缩放） ====== */
         .text-layer {
             position: absolute;
             top: 15.5%;
             left: 4.5%;
             width: 91%;
-            padding: 10px 20px 30px 20px;
-            color: #2c3e50;
-            font-size: 19.2px;
+            /* ★ 字号改为 vw（视口宽度），图片多宽，字就多大 */
+            font-size: 2.2vw;
             line-height: 2.0;
+            color: #2c3e50;
+            padding: 0.8vw 1.5vw 2vw 1.5vw;
             overflow: visible;
+        }
+
+        /* 防止屏幕非常宽时字过大 */
+        @media (min-width: 800px) {
+            .text-layer {
+                font-size: 16px; /* 桌面端最大 16px */
+            }
+        }
+
+        /* 防止屏幕非常窄时字过小 */
+        @media (max-width: 400px) {
+            .text-layer {
+                font-size: 9.5px; /* 最小 9.5px，保证能看清 */
+            }
         }
 
         .paragraph {
             text-indent: 2em;
-            margin: 0 0 8px 0;
+            margin: 0 0 0.4em 0;
             color: #2c3e50;
         }
 
@@ -87,22 +102,6 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
-        }
-
-        /* 响应式 */
-        @media (max-width: 640px) {
-            .text-layer {
-                font-size: 16px;
-                line-height: 1.9;
-                padding: 8px 14px 24px 14px;
-            }
-        }
-        @media (max-width: 400px) {
-            .text-layer {
-                font-size: 15px;
-                line-height: 1.8;
-                padding: 6px 12px 20px 12px;
-            }
         }
     </style>
 </head>
