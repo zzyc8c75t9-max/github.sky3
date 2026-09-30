@@ -6,184 +6,80 @@
     <title>致敬信</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #d0d0d0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
             font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-            padding: 30px 16px 60px 16px;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        /* 背景金色装饰丝带 */
-        .bg-decor {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-        .bg-decor::before {
-            content: '';
-            position: absolute;
-            top: -10%; right: -10%;
-            width: 60%; height: 60%;
-            border: 12px solid #d4af37;
-            border-radius: 50%;
-            transform: rotate(30deg);
-            opacity: 0.3;
-            filter: blur(2px);
-        }
-        .bg-decor::after {
-            content: '';
-            position: absolute;
-            bottom: -20%; left: -10%;
-            width: 70%; height: 70%;
-            border: 16px solid #d4af37;
-            border-radius: 50%;
-            transform: rotate(-45deg);
-            opacity: 0.25;
-            filter: blur(4px);
+        /* ★ 整个页面背景：白色 → 浅蓝渐变 */
+        body {
+            background: linear-gradient(135deg,
+                #ffffff 0%,
+                #f0f8fb 30%,
+                #d8eef5 60%,
+                #b8e0ec 85%,
+                #a0d4e4 100%);
+            background-attachment: fixed;
         }
 
-        .envelope-wrapper {
+        /* 整个场景：宽度固定，高度由内容撑开 */
+        .scene {
             position: relative;
             width: 100%;
-            max-width: 620px;
+            max-width: 800px;
             margin: 0 auto;
-            z-index: 1;
         }
 
-        /* ====== 信纸 ====== */
-        .letter-paper {
-            position: relative;
-            z-index: 2;
-            background: #de2910;
-            width: 86%;
-            margin: 0 auto;
-            /* ★ 修改：顶部内边距为 0，让图片紧贴最上方；底部为 0，由文字区域撑开 */
-            padding: 0 28px 0 28px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            border: 1px solid #b71c1c;
-        }
-        /* ★ 删除了 .letter-paper::before (原本的金色边框，现已移至文字区) */
-
-        /* 信纸头部（图片区域） */
-        .letter-header {
-            position: relative;
-            z-index: 3;
-            line-height: 0;
-            margin: 0 auto;
-            width: 100%;
-        }
-        /* ★ 头部图片：四周边缘做虚化处理，使其像融入红色信纸背景 */
-        .header-img {
+        /* 背景图（整张信纸图） */
+        .bg-img {
+            display: block;
             width: 100%;
             height: auto;
-            display: block;
-            /* 使用 mask-image 对图片四周边缘做渐变透明 */
-            -webkit-mask-image:
-                linear-gradient(to bottom, transparent 0%, black 8%, black 72%, transparent 100%),
-                linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-            -webkit-mask-composite: source-in;
-            mask-image:
-                linear-gradient(to bottom, transparent 0%, black 8%, black 72%, transparent 100%),
-                linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
-            mask-composite: intersect;
         }
 
-        /* Logo 区域（已废弃，保留样式不影响） */
-        .logo-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .logo-img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 4px;
-        }
-        .logo-svg-fallback {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 4px;
-            display: none;
-        }
-
-        /* 标题（已废弃） */
-        .main-title {
-            font-size: 38px;
-            color: #ffd700;
-            font-weight: bold;
-            letter-spacing: 8px;
-            margin: 12px 0 8px 0;
-            font-family: "STKaiti", "KaiTi", serif;
-        }
-
-        /* 花饰（已废弃） */
-        .flourish {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            color: #ffd700;
-            font-size: 18px;
-        }
-        .flourish-line {
-            width: 40px;
-            height: 2px;
-            background: #ffd700;
-            border-radius: 2px;
-        }
-
-        /* 信件内容（★ 金色边框移到这里，图片在框外） */
-        .letter-content {
-            font-size: 17px;
+        /* 文字层：绝对定位到图片内的浅色信纸区域 */
+        .text-layer {
+            position: absolute;
+            top: 15.5%;
+            left: 4.5%;
+            width: 91%;
+            padding: 10px 20px 30px 20px;
+            color: #2c3e50;
+            font-size: 19.2px;
             line-height: 2.0;
-            color: #ffffff;
-            word-break: break-word;
-            position: relative;
-            z-index: 3;
-            width: 100%;
             overflow: visible;
-            /* ★ 金色边框，只围绕文字区域 */
-            border: 2px solid #ffd700;
-            border-radius: 4px;
-            /* 底部 150px 是为了让边框延伸至下方信封背后 */
-            padding: 24px 20px 150px 20px;
         }
+
         .paragraph {
             text-indent: 2em;
-            margin: 0;
-            color: #ffffff;
-            min-height: 1.2em;
+            margin: 0 0 8px 0;
+            color: #2c3e50;
         }
+
         .char {
             opacity: 0;
             animation: fadeIn 0.05s forwards;
             display: inline;
         }
-        .char.yellow {
-            color: #ffffff;
+        .char.bold {
+            color: #2c3e50;
             font-weight: 700;
         }
         .char.white {
-            color: #ffffff;
+            color: #2c3e50;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(3px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .cursor {
             display: inline-block;
             width: 2px;
             height: 1.1em;
-            background: #ffd700;
+            background: #1e4e6b;
             animation: blink 0.7s step-end infinite;
             vertical-align: text-bottom;
             margin-left: 2px;
@@ -193,154 +89,49 @@
             50% { opacity: 0; }
         }
 
-        /* ====== 信封底部 ====== */
-        .envelope-bottom {
-            position: relative;
-            z-index: auto;
-            margin-top: -80px;
-            height: 220px;
-            width: 100%;
-            background: #c62828;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .envelope-left {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 50%;
-            height: 100%;
-            background: #e53935;
-            clip-path: polygon(0 0, 0 100%, 100% 100%);
-            z-index: 3;
-            border-bottom-left-radius: 12px;
-        }
-        .envelope-right {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            background: #e53935;
-            clip-path: polygon(100% 0, 0 100%, 100% 100%);
-            z-index: 3;
-            border-bottom-right-radius: 12px;
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: -60px;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: #b71c1c;
-            clip-path: polygon(0 100%, 50% 0, 100% 100%);
-            z-index: 1;
-        }
-
-        /* 圆形印章 */
-        .envelope-seal {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            z-index: 4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .seal-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .seal-svg-fallback {
-            width: 100%;
-            height: 100%;
-            display: none;
-        }
-
         /* 响应式 */
         @media (max-width: 640px) {
-            body { padding: 20px 10px 40px 10px; }
-            .letter-paper { padding: 0 18px 0 18px; }
-            .letter-content { padding: 18px 15px 120px 15px; }
-            .main-title { font-size: 32px; letter-spacing: 6px; }
-            .logo-img { width: 60px; height: 60px; }
-            .logo-svg-fallback { width: 60px; height: 60px; }
-            .envelope-bottom { height: 180px; margin-top: -70px; }
-            .envelope-flap { top: -50px; height: 50px; }
-            .envelope-seal { width: 70px; height: 70px; bottom: 20px; }
-            .letter-content { font-size: 16px; }
+            .text-layer {
+                font-size: 16px;
+                line-height: 1.9;
+                padding: 8px 14px 24px 14px;
+            }
         }
         @media (max-width: 400px) {
-            .letter-paper { padding: 0 14px 0 14px; }
-            .letter-content { padding: 14px 12px 100px 12px; }
-            .main-title { font-size: 28px; letter-spacing: 4px; }
-            .logo-img { width: 50px; height: 50px; }
-            .logo-svg-fallback { width: 50px; height: 50px; }
-            .envelope-bottom { height: 150px; margin-top: -60px; }
-            .envelope-flap { top: -40px; height: 40px; }
-            .envelope-seal { width: 60px; height: 60px; bottom: 15px; }
-            .letter-content { font-size: 15px; }
+            .text-layer {
+                font-size: 15px;
+                line-height: 1.8;
+                padding: 6px 12px 20px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="bg-decor"></div>
 
-    <div class="envelope-wrapper">
-        <!-- 信纸 -->
-        <div class="letter-paper">
-            <!-- ★★★ 头部图片（在金色边框之外）★★★ -->
-            <div class="letter-header">
-                <img class="header-img" src="header.png" alt="致敬信头部">
-            </div>
-            <!-- 信件正文（金色边框只加在这个区域） -->
-            <div class="letter-content" id="letterContent"></div>
-        </div>
+<div class="scene">
+    <!-- ★★★ 整张信纸图作为背景 ★★★ -->
+    <img class="bg-img" src="paper.png" alt="致敬信信纸">
 
-        <!-- 信封底部 -->
-        <div class="envelope-bottom">
-            <div class="envelope-flap"></div>
-            <div class="envelope-left"></div>
-            <div class="envelope-right"></div>
-
-            <!-- 印章区域 -->
-            <div class="envelope-seal">
-                <img class="seal-img"
-                     src="seal.png"
-                     alt="印章"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <svg class="seal-svg-fallback" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="#c62828" stroke-width="4" stroke-dasharray="10 5" />
-                    <circle cx="50" cy="50" r="18" fill="#c62828" />
-                    <path d="M 40 50 L 60 50 M 50 40 L 50 60" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
-                </svg>
-            </div>
-        </div>
-    </div>
+    <!-- 文字层：绝对定位到浅色信纸区域内 -->
+    <div class="text-layer" id="letterContent"></div>
+</div>
 
 <script>
 (function() {
-    // ---------- 致敬信全文（[[...]] 内为加粗字体） ----------
+    // ---------- 致敬信定稿全文 ----------
     const paragraphs = [
         { text: '亲爱的员工朋友们：', noIndent: true },
         { text: '大家好！' },
-        { text: '生产复发轫，佳节又重阳。今天，我们齐聚一堂，召开2026年度生产·质量大会，系统总结过去一年的奋斗历程，共同擘画新一年的宏伟蓝图。在此，公司党委、董事会和经营班子，向辛勤耕耘在生产、质量一线的员工致以亲切的问候，向默默奋进在各条工作战线上的全体员工表达最诚挚的敬意！' },
-        { text: '回首这一年，我们以专注诠释责任、以合力推动发展、以实干书写答卷，助力习酒在高质量发展和现代化建设征途中稳步前行、砥砺奋进。[[党建铸魂强引擎]]。坚持党建工作与生产经营同频共振，将党组织的凝聚力、战斗力转化为攻坚克难的硬核执行力，以高质量党建引领习酒高质量发展。[[优质优产硕果盈]]。深耕传统酿造技艺，精准执行工艺规范，严格把控质量关口，习酒品质不断超越、不断升华。[[创新赋能赢未来]]。全面推进生产流程标准化、生产过程数字化、生产装备智能化，现代科技与传统酿造深度融合，习酒"优质优产"特色生产道路越走越宽、越走越稳。[[厚植根基强人才]]。注重人才培养，营造"比学赶帮超"良好氛围，培养"精技艺、强管理、会品评"的复合型人才，持续优化习酒人才梯队结构。[[君品之道行担当]]。将君品文化内化为"日用而不觉"的行为准则，在日常工作中争当"实干者"，在危急时刻勇做"逆行者"，展现习酒人的社会责任与大爱担当。' },
-        { text: '[[不经一番寒彻骨，怎得梅花扑鼻香]]' },
-        { text: '回望来路，点点霜露汇聚成河。[[是你们]]，将信仰融入血脉，以坚定的态度，让生产跃动着最平稳的节奏；[[是你们]]，将星光揉进工作，以严谨的精度，让品质沉淀着最迷人的芳醇；[[是你们]]，将不懈凝于探索，以智慧的维度，让创新酝酿着最崭新的未来；[[是你们]]，将笃学化作日常，以勤奋的强度，让技能闪烁着最耀眼的光芒；[[是你们]]，将深情落在细微，以反哺的力度，让温暖延续着最幸福的价值。在此，向你们致以崇高的敬意！' },
-        { text: '[[江山代有才人出，各领风骚数百年]]' },
-        { text: '放怀天地，漫漫长风鼓荡作歌。[[让我们]]，以"立志欲与青云期"的魄力，在生产工作中，持续革故鼎新，谱就生产新篇章；[[让我们]]，以"莫向光阴惰寸功"的执着，在产品质量上，不断夯实基础，攀登质量新高峰；[[让我们]]，以"任尔东西南北风"的干劲，不畏艰难险阻，共筑企业梦想，为"百年习酒、世界一流"的宏伟愿景而不懈奋斗！' },
-        { text: '过去一年，大家辛苦了！' },
-        { text: '新的一年，让我们继续携手，同心同行，共铸辉煌！' }
+        { text: '秋酿启序，习酒飘香；实干笃行，华章日新。今天，我们召开2027年度生产·质量大会，系统总结过去一年的工作，共同壁画新一年的发展蓝图。在此，公司党委、经营班子向辛勤耕耘在生产、质量一线的员工致以亲切的问候，向默默奋进在各条工作战线上的全体员工表达最诚挚的感谢！' },
+        { text: '回望过去一年，挑战与机遇并存，压力与动力同在。全体习酒人承压前行、迎难而上，牢牢守住了发展基本盘，稳稳迈出高质量发展新步伐。[[党建引领强根基]]。坚持把党建引领贯穿企业发展全过程，将组织优势转化为精工艺、提品质、促创新的实干动能，让党旗在车间班组高高飘扬，让先锋在攻坚前沿熠熠生辉，为习酒行稳致远筑牢根本保障。[[匠心守正铸品质]]。传承千年酿造技艺，顺应节令时序，端午制曲不误一时，重阳下沙不省一工，于寒来暑往的专注中雕琢工序细节，在日复一日的坚守中夯实品质基础。[[创新驱动提质效]]。坚持守正创新，加速推动生产标准化落地、数字化迭代、智能化升级，让古老技艺焕发时代光彩，让传统酿造插上科技翅膀，持续拓宽习酒“优质优产”特色生产道路。[[人才赋能筑高地]]。统筹人才储备库建设，搭建人才成长平台，以慧眼识才选贤任能，以雅量容才聚智聚力，让各类人才在习酒干事有舞台、成长有空间、发展有未来，实现企业与员工发展共进、价值共创、成果共享。[[文化聚力践初心]]。将君品文化融入岗位实践，心怀善念、行有善举，在平凡岗位上履职尽责、在急难险重任务前挺身而出，把个人奋斗融入企业发展大局，彰显习酒人向上向善的精神风貌。' },
+        { text: '[[一路霜雪皆成酿，半卷光阴自带香]]' },
+        { text: '回望来路，[[是你们]]，以信仰为灯，将红色基因融入血脉，让先锋旗帜在各条战线高高飘扬；[[是你们]]，以匠心为尺，将严谨贯穿每道工序，让佳酿在岁月窖藏中愈显醇香；[[是你们]]，以创新为翼，将智慧融入工艺攻关，让品质在技术突破中稳步提升；[[是你们]]，以笃学为梯，将钻研融入岗位日常，让技艺在千锤百炼中绽放光彩；[[是你们]]，以善念为怀，将温情浸润细微之处，让君品文化在润物无声中根植人心。在此，向每一位奋力拼搏的习酒人，致以崇高的敬意！' },
+        { text: '[[枸酱千年留味在，习酒今朝启新程]]' },
+        { text: '展望未来，[[让我们]]，“跬步不休，千里可至”的韧劲，在生产工作中提质增效、创新突破，奏响生产新乐章；[[让我们]]，“毫厘必较，微瑕不放”的较真，在质量管控上精雕细刻、追求卓越，擦亮质量硬招牌；[[让我们]]，“同舟共济，众篙齐撑”的合力，在全局任务中主动补位、勇挑重担，为“东方习酒、享誉全球”的壮阔图景持续发力！' },
+        { text: '过去一年，感谢大家的辛勤奉献。' },
+        { text: '新的一年，让我们同心聚力，携手共创习酒更加辉煌的明天！' },
+        { text: '贵州习酒股份有限公司', noIndent: true, alignRight: true },
+        { text: '2026年10月9日', noIndent: true, alignRight: true }
     ];
 
     const container = document.getElementById('letterContent');
@@ -351,6 +142,7 @@
         const div = document.createElement('div');
         div.className = 'paragraph';
         if (p.noIndent) div.style.textIndent = '0';
+        if (p.alignRight) div.style.textAlign = 'right';
         container.appendChild(div);
         paragraphElements.push(div);
     });
@@ -358,19 +150,19 @@
     function parseParagraph(text) {
         const chars = [];
         let i = 0;
-        let isYellow = false;
+        let isBold = false;
         while (i < text.length) {
             if (text.substring(i, i + 2) === '[[') {
-                isYellow = true;
+                isBold = true;
                 i += 2;
                 continue;
             }
             if (text.substring(i, i + 2) === ']]') {
-                isYellow = false;
+                isBold = false;
                 i += 2;
                 continue;
             }
-            chars.push({ char: text[i], yellow: isYellow });
+            chars.push({ char: text[i], bold: isBold });
             i++;
         }
         return chars;
@@ -380,11 +172,7 @@
     paragraphs.forEach((p, pi) => {
         const chars = parseParagraph(p.text);
         chars.forEach(c => {
-            queue.push({
-                char: c.char,
-                yellow: c.yellow,
-                paragraphIndex: pi
-            });
+            queue.push({ char: c.char, bold: c.bold, paragraphIndex: pi });
         });
     });
 
@@ -410,7 +198,7 @@
 
         const item = queue[idx];
         const span = document.createElement('span');
-        span.className = 'char ' + (item.yellow ? 'yellow' : 'white');
+        span.className = 'char ' + (item.bold ? 'bold' : 'white');
         span.textContent = item.char;
         span.style.animationDuration = '0.05s';
 
