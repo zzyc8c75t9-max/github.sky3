@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
     <title>致敬信</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            /* ★ 禁止微信/系统强制放大字体 */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
 
         html, body {
             width: 100%;
@@ -39,37 +46,59 @@
             height: auto;
         }
 
-        /* ====== 文字层（关键：用 vw 让字号跟随屏幕宽度自动缩放） ====== */
+        /* ====== 文字层 ====== */
+        /*
+         * 核心思路：
+         * 1. 字号用 vw（跟随屏幕宽度），图片多宽字多大
+         * 2. 内边距也用 vw，保证上下左右留白比例一致
+         * 3. 限制桌面端最大字号，限制手机端最小字号
+         * 4. top/left/width 保持百分比，跟随图片缩放
+         */
         .text-layer {
             position: absolute;
             top: 15.5%;
-            left: 4.5%;
-            width: 91%;
-            /* ★ 字号改为 vw（视口宽度），图片多宽，字就多大 */
-            font-size: 2.2vw;
-            line-height: 2.0;
+            left: 5%;
+            width: 90%;
+
+            /* 用 vw 让字号跟随图片宽度等比缩放 */
+            font-size: 2.05vw;
+            line-height: 1.85;
+
             color: #2c3e50;
-            padding: 0.8vw 1.5vw 2vw 1.5vw;
+            padding: 0.8vw 1.2vw 1.8vw 1.2vw;
             overflow: visible;
+
+            /* 保证段落之间不会挤在一起 */
+            word-break: break-word;
         }
 
-        /* 防止屏幕非常宽时字过大 */
-        @media (min-width: 800px) {
+        /* 桌面端：宽度够大时锁定字号，避免文字过大 */
+        @media (min-width: 780px) {
             .text-layer {
-                font-size: 16px; /* 桌面端最大 16px */
+                font-size: 15.5px;
+                line-height: 1.95;
             }
         }
 
-        /* 防止屏幕非常窄时字过小 */
-        @media (max-width: 400px) {
+        /* 手机端：小屏时锁定最小字号，避免看不清 */
+        @media (max-width: 420px) {
             .text-layer {
-                font-size: 9px; /* 最小 9.5px，保证能看清 */
+                font-size: 9.2px;
+                line-height: 1.8;
+            }
+        }
+
+        /* 超小屏：进一步缩小，防止溢出 */
+        @media (max-width: 360px) {
+            .text-layer {
+                font-size: 8.5px;
+                line-height: 1.75;
             }
         }
 
         .paragraph {
             text-indent: 2em;
-            margin: 0 0 0.4em 0;
+            margin: 0 0 0.45em 0;
             color: #2c3e50;
         }
 
@@ -151,16 +180,8 @@
         let i = 0;
         let isBold = false;
         while (i < text.length) {
-            if (text.substring(i, i + 2) === '[[') {
-                isBold = true;
-                i += 2;
-                continue;
-            }
-            if (text.substring(i, i + 2) === ']]') {
-                isBold = false;
-                i += 2;
-                continue;
-            }
+            if (text.substring(i, i + 2) === '[[') { isBold = true; i += 2; continue; }
+            if (text.substring(i, i + 2) === ']]') { isBold = false; i += 2; continue; }
             chars.push({ char: text[i], bold: isBold });
             i++;
         }
@@ -190,10 +211,7 @@
     }
 
     function typeNext() {
-        if (idx >= total) {
-            removeCursor();
-            return;
-        }
+        if (idx >= total) { removeCursor(); return; }
 
         const item = queue[idx];
         const span = document.createElement('span');
